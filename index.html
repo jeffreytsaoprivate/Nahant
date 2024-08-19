@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photo Gallery (Pairs with Navigation)</title>
+  <style>
+    * {
+     font-family: Arial, Helvetica, sans-serif;
+    }
+
+   .container {background-color: white; display: grid; grid-auto-rows: auto-fit; grid-template-rows: auto; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 10px; }
+   .tile {border: 5px solid white; background-color: white;}
+   p{margin:5px;}
+   p.normal {font-weight: normal; font-size: 0.875em; color: black;}
+   p.light {font-weight: normal; font-size: 0.5em; color: grey;}
+   p.thick {font-weight: bold; font-size: 1em; color: black;}
+   p.huge {
+	font-weight: bold; font-size: 2em; color: white;
+	text-shadow:
+	    1px 1px 0 #000,
+	    -1px 1px 0 #000,
+	    -1px -1px 0 #000,
+	    1px -1px 0 #000,
+	    1px 0px 0 #000,
+	    -1px 0px 0 #000,
+	    0px -1px 0 #000,
+	    0px -1px 0 #000;}
+
+   p.small {font-weight: normal; font-size: 0.75em; color: grey;}
+   .badge {background-color: rgba(0, 0, 0, 0.4); color: white; padding: 2px 4px; text-align: center; font-size: 1em; border-radius: 5px;}
+    .control {
+      display: flex;
+      text-align: right;
+      vertical-align: middle;
+      //flex-wrap: wrap;
+      margin: 20px auto;
+      font-size: 50px;
+    }
+
+    .control {
+      display: flex;
+      flex-wrap: wrap;
+      background-color: rgba(0,0,0,0.2);
+      border: none;
+      color: rgba(255,255,255,0.5);
+      margin: 5px;
+      padding: 5px 5px;
+      text-align: center;
+      vertical-align: middle;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 30px;
+    }
+    .control:hover {
+      background-color: rgba(0,0,0,0.5);
+      color: white;
+    }
+    /* Style each image pair */
+    .image-pair {
+      display: flex;
+      gap: 10px;
+    }
+
+    /* Style the images */
+    .image-pair img {
+      max-width: 100%;  
+      height: auto;
+      object-fit: cover; /* Keeps aspect ratio */
+    }
+    .figure {
+      background-color: #E0E0E0;
+      //min-width: 500px;
+    }
+
+    /* Add some space between captions (optional) */
+    .image-pair figure {
+      margin-bottom: 5px;
+    }
+.imagecontainer {
+  position: relative;
+  text-align: center;
+  color: white;
+}
+
+/* Bottom left text */
+.bottom-left {
+  position: absolute;
+  bottom: 8px;
+  left: 16px;
+}
+
+/* Top left text */
+.top-left {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+}
+
+/* Top right text */
+.top-right {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+/* Bottom right text */
+.bottom-right {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+}
+
+/* Centered text */
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.center-left {
+  position: absolute;
+  top: 50%;
+  left: 8px;
+  transform: translate(0, -50%);
+}
+.center-right {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translate(0, -50%);
+}
+.center-top{
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  transform: translate(0, -50%);
+}
+  </style>
+</head>
+<body>
+  <h1>12 Spouting Horn Road, Nahant MA 01908</h1>
+
+  <div class="container">
+    <div name="Before" class="tile">
+      <DIV class="imagecontainer">
+	<div class="top-left"><div class="badge"><p style="font-size:2em; font-weight:bold;">Before</p></DIV></DIV>
+	<div class="bottom-right"><div class="badge" name="counter"></DIV></DIV>
+	<DIV class="center-left"><button class="control" name="prev-pair">&#9665;</button></DIV>
+	<DIV class="center-right"><button class="control" name="next-pair">&#9655;</button></DIV>
+	<img id="BeforeImage" width=100% alt="Before image">
+      </DIV>
+      <DIV id="BeforeCaption"></DIV>
+    </div>
+    <div name="After" class="tile">
+      <DIV class="imagecontainer">
+	<div class="top-left"><div class="badge"><p style="font-size:2em; font-weight:bold;">After</p></DIV></DIV>
+	<div class="bottom-right"><div class="badge" name="counter"></DIV></DIV>
+	<DIV class="center-left"><button class="control" name="prev-pair">&#9665;</button></DIV>
+	<DIV class="center-right"><button class="control" name="next-pair">&#9655;</button></DIV>
+	<img id="AfterImage" width=100% alt="After image">
+      </DIV>
+      <DIV id="AfterCaption"></DIV>
+    </div>
+  </div>
+
+  <script>
+    let galleryPairs = [    
+	//{ image1: "before1.webp", caption1: "", image2: "after1.JPEG", caption2: ""  },
+	//{ image1: "before4.webp", caption1: "", image2: "after4.JPEG", caption2: ""  },
+	//{ image1: "before5.webp", caption1: "", image2: "after5.JPEG", caption2: ""  },
+	{ image1: "before6.webp", caption1: "House from street side", image2: "after6.JPEG", caption2: "House from street side"  },
+	//{ image1: "before10.webp", caption1: "", image2: "after10.JPEG", caption2: ""  },
+	{ image1: "before11.webp", caption1: "Dining room", image2: "after11.JPEG", caption2: "Dining room"  },
+	{ image1: "before12.webp", caption1: "Master bedroom", image2: "after12.JPEG", caption2: "Living room"  },
+	{ image1: "before13.webp", caption1: "Study", image2: "after13.JPEG", caption2: "Study"  },
+	{ image1: "before14.webp", caption1: "Work room", image2: "after14.JPEG", caption2: "Master bedroom"  },
+	{ image1: "before7.webp", caption1: "House from ocean side", image2: "after7.JPEG", caption2: "House from ocean side"  },
+	{ image1: "before16.webp", caption1: "House from ocean side", image2: "after16.JPEG", caption2: "House from ocean side"  },
+	{ image1: "before15.webp", caption1: "Backyard", image2: "after15.JPEG", caption2: "Backyard"  },
+	{ image1: "before2.webp", caption1: "Deck", image2: "after2.JPEG", caption2: "Deck"  },
+	//{ image1: "before3.webp", caption1: "Deck", image2: "after3.JPEG", caption2: "Deck"  },
+	{ image1: "before8.webp", caption1: "Deck", image2: "after8.JPEG", caption2: "View from deck"  },
+	{ image1: "before9.webp", caption1: "Cove", image2: "after9.JPEG", caption2: "Cove"  },
+	//{ image1: "before17.webp", caption1: "", image2: "after17.JPEG", caption2: ""  },
+	//{ image1: "before18.webp", caption1: "", image2: "after18.JPEG", caption2: ""  },
+	//{ image1: "before19.webp", caption1: "", image2: "after19.JPEG", caption2: ""  },
+	];
+
+  const imagePairs = document.querySelectorAll('.image-pair');
+  const imageCounters = document.querySelectorAll('.counter');
+  let currentPairIndex = 0;
+
+  function showCurrentPair() {
+    imagePairs.forEach((pair, index) => {
+      pair.style.display = (index === currentPairIndex ? 'flex' : 'none');
+    });
+    document.getElementsByName('counter').forEach((counter, index) => {
+      counter.innerHTML = (currentPairIndex+1) + '&nbsp;/&nbsp;' + galleryPairs.length;
+    });
+    document.getElementById('BeforeCaption').innerHTML = galleryPairs[currentPairIndex].caption1;
+    document.getElementById('AfterCaption').innerHTML = galleryPairs[currentPairIndex].caption2;
+    document.getElementById('BeforeImage').src = galleryPairs[currentPairIndex].image1;
+    document.getElementById('AfterImage').src = galleryPairs[currentPairIndex].image2;
+
+  }
+
+  document.getElementsByName('prev-pair').forEach((btn, index) => {
+    btn.addEventListener('click', () => {
+	currentPairIndex = (currentPairIndex - 1 + galleryPairs.length) % galleryPairs.length;
+	showCurrentPair();
+    });
+  });
+  document.getElementsByName('next-pair').forEach((btn, index) => {
+    btn.addEventListener('click', () => {
+	currentPairIndex = (currentPairIndex + 1) % galleryPairs.length;
+	showCurrentPair();
+    });
+  });
+
+  showCurrentPair(); // Show the first pair on page load
+
+  </script>
+
+</body>
+
+</html>
