@@ -1,227 +1,444 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Photo Gallery (Pairs with Navigation)</title>
-  <style>
-    * {
-     font-family: Arial, Helvetica, sans-serif;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>12 Spouting Horn Road — Before &amp; After</title>
 
-   .container {background-color: white; display: grid; grid-auto-rows: auto-fit; grid-template-rows: auto; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 10px; }
-   .tile {border: 5px solid white; background-color: white;}
-   p{margin:5px;}
-   p.normal {font-weight: normal; font-size: 0.875em; color: black;}
-   p.light {font-weight: normal; font-size: 0.5em; color: grey;}
-   p.thick {font-weight: bold; font-size: 1em; color: black;}
-   p.huge {
-	font-weight: bold; font-size: 2em; color: white;
-	text-shadow:
-	    1px 1px 0 #000,
-	    -1px 1px 0 #000,
-	    -1px -1px 0 #000,
-	    1px -1px 0 #000,
-	    1px 0px 0 #000,
-	    -1px 0px 0 #000,
-	    0px -1px 0 #000,
-	    0px -1px 0 #000;}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 
-   p.small {font-weight: normal; font-size: 0.75em; color: grey;}
-   .badge {background-color: rgba(0, 0, 0, 0.4); color: white; padding: 2px 4px; text-align: center; font-size: 1em; border-radius: 5px;}
-    .control {
-      display: flex;
-      text-align: right;
-      vertical-align: middle;
-      //flex-wrap: wrap;
-      margin: 20px auto;
-      font-size: 50px;
-    }
-
-    .control {
-      display: flex;
-      flex-wrap: wrap;
-      background-color: rgba(0,0,0,0.2);
-      border: none;
-      color: rgba(255,255,255,0.5);
-      margin: 5px;
-      padding: 5px 5px;
-      text-align: center;
-      vertical-align: middle;
-      text-decoration: none;
-      display: inline-block;
-      font-size: 30px;
-    }
-    .control:hover {
-      background-color: rgba(0,0,0,0.5);
-      color: white;
-    }
-    /* Style each image pair */
-    .image-pair {
-      display: flex;
-      gap: 10px;
-    }
-
-    /* Style the images */
-    .image-pair img {
-      max-width: 100%;  
-      height: auto;
-      object-fit: cover; /* Keeps aspect ratio */
-    }
-    .figure {
-      background-color: #E0E0E0;
-      //min-width: 500px;
-    }
-
-    /* Add some space between captions (optional) */
-    .image-pair figure {
-      margin-bottom: 5px;
-    }
-.imagecontainer {
-  position: relative;
-  text-align: center;
-  color: white;
-}
-
-/* Bottom left text */
-.bottom-left {
-  position: absolute;
-  bottom: 8px;
-  left: 16px;
-}
-
-/* Top left text */
-.top-left {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-}
-
-/* Top right text */
-.top-right {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-}
-
-/* Bottom right text */
-.bottom-right {
-  position: absolute;
-  bottom: 8px;
-  right: 8px;
-}
-
-/* Centered text */
-.centered {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-.center-left {
-  position: absolute;
-  top: 50%;
-  left: 8px;
-  transform: translate(0, -50%);
-}
-.center-right {
-  position: absolute;
-  top: 50%;
-  right: 8px;
-  transform: translate(0, -50%);
-}
-.center-top{
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  transform: translate(0, -50%);
-}
-  </style>
-</head>
-<body>
-  <h1>12 Spouting Horn Road, Nahant MA 01908</h1>
-
-  <div class="container">
-    <div name="Before" class="tile">
-      <DIV class="imagecontainer">
-	<div class="top-left"><div class="badge"><p style="font-size:2em; font-weight:bold;">Before</p></DIV></DIV>
-	<div class="bottom-right"><div class="badge" name="counter"></DIV></DIV>
-	<DIV class="center-left"><button class="control" name="prev-pair">&#9665;</button></DIV>
-	<DIV class="center-right"><button class="control" name="next-pair">&#9655;</button></DIV>
-	<img id="BeforeImage" width=100% alt="Before image">
-      </DIV>
-      <DIV id="BeforeCaption"></DIV>
-    </div>
-    <div name="After" class="tile">
-      <DIV class="imagecontainer">
-	<div class="top-left"><div class="badge"><p style="font-size:2em; font-weight:bold;">After</p></DIV></DIV>
-	<div class="bottom-right"><div class="badge" name="counter"></DIV></DIV>
-	<DIV class="center-left"><button class="control" name="prev-pair">&#9665;</button></DIV>
-	<DIV class="center-right"><button class="control" name="next-pair">&#9655;</button></DIV>
-	<img id="AfterImage" width=100% alt="After image">
-      </DIV>
-      <DIV id="AfterCaption"></DIV>
-    </div>
-  </div>
-
-  <script>
-    let galleryPairs = [    
-	//{ image1: "before1.webp", caption1: "", image2: "after1.JPEG", caption2: ""  },
-	//{ image1: "before4.webp", caption1: "", image2: "after4.JPEG", caption2: ""  },
-	//{ image1: "before5.webp", caption1: "", image2: "after5.JPEG", caption2: ""  },
-	{ image1: "before6.webp", caption1: "House from street side", image2: "after6.JPEG", caption2: "House from street side"  },
-	//{ image1: "before10.webp", caption1: "", image2: "after10.JPEG", caption2: ""  },
-	{ image1: "before11.webp", caption1: "Dining room", image2: "after11.JPEG", caption2: "Dining room"  },
-	{ image1: "before12.webp", caption1: "Master bedroom", image2: "after12.JPEG", caption2: "Living room"  },
-	{ image1: "before13.webp", caption1: "Study", image2: "after13.JPEG", caption2: "Study"  },
-	{ image1: "before14.webp", caption1: "Work room", image2: "after14.JPEG", caption2: "Master bedroom"  },
-	{ image1: "before7.webp", caption1: "House from ocean side", image2: "after7.JPEG", caption2: "House from ocean side"  },
-	{ image1: "before16.webp", caption1: "House from ocean side", image2: "after16.JPEG", caption2: "House from ocean side"  },
-	{ image1: "before15.webp", caption1: "Backyard", image2: "after15.JPEG", caption2: "Backyard"  },
-	{ image1: "before2.webp", caption1: "Deck", image2: "after2.JPEG", caption2: "Deck"  },
-	//{ image1: "before3.webp", caption1: "Deck", image2: "after3.JPEG", caption2: "Deck"  },
-	{ image1: "before8.webp", caption1: "Deck", image2: "after8.JPEG", caption2: "View from deck"  },
-	{ image1: "before9.webp", caption1: "Cove", image2: "after9.JPEG", caption2: "Cove"  },
-	//{ image1: "before17.webp", caption1: "", image2: "after17.JPEG", caption2: ""  },
-	//{ image1: "before18.webp", caption1: "", image2: "after18.JPEG", caption2: ""  },
-	//{ image1: "before19.webp", caption1: "", image2: "after19.JPEG", caption2: ""  },
-	];
-
-  const imagePairs = document.querySelectorAll('.image-pair');
-  const imageCounters = document.querySelectorAll('.counter');
-  let currentPairIndex = 0;
-
-  function showCurrentPair() {
-    imagePairs.forEach((pair, index) => {
-      pair.style.display = (index === currentPairIndex ? 'flex' : 'none');
-    });
-    document.getElementsByName('counter').forEach((counter, index) => {
-      counter.innerHTML = (currentPairIndex+1) + '&nbsp;/&nbsp;' + galleryPairs.length;
-    });
-    document.getElementById('BeforeCaption').innerHTML = galleryPairs[currentPairIndex].caption1;
-    document.getElementById('AfterCaption').innerHTML = galleryPairs[currentPairIndex].caption2;
-    document.getElementById('BeforeImage').src = galleryPairs[currentPairIndex].image1;
-    document.getElementById('AfterImage').src = galleryPairs[currentPairIndex].image2;
-
+<style>
+  :root{
+    --navy: #16283D;
+    --slate: #5C7A8A;
+    --copper: #B2623C;
+    --copper-dark: #8f4c2c;
+    --sand: #E9E0CE;
+    --cream: #FBF7F0;
+    --ink-soft: rgba(22,40,61,0.62);
+    --line: rgba(22,40,61,0.12);
+    --radius: 14px;
+    --shadow: 0 20px 40px -18px rgba(22,40,61,0.35);
   }
 
-  document.getElementsByName('prev-pair').forEach((btn, index) => {
-    btn.addEventListener('click', () => {
-	currentPairIndex = (currentPairIndex - 1 + galleryPairs.length) % galleryPairs.length;
-	showCurrentPair();
+  *{ box-sizing: border-box; }
+
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin:0;
+    background: var(--cream);
+    color: var(--navy);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position: relative;
+    padding: 64px 24px 40px;
+    text-align: center;
+    overflow: hidden;
+  }
+  .hero::before{
+    content: "";
+    position: absolute;
+    left: 0; right: 0; top: 0;
+    height: 100%;
+    background: linear-gradient(180deg, var(--sand) 0%, var(--cream) 78%);
+    z-index: -1;
+  }
+  .hero::after{
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 132px;
+    width: min(720px, 86%);
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--copper) 50%, transparent);
+    transform: translateX(-50%);
+    opacity: 0.6;
+  }
+  .eyebrow{
+    margin: 0 0 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--copper-dark);
+    font-weight: 500;
+  }
+  h1{
+    margin: 0;
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(28px, 5vw, 48px);
+    letter-spacing: -0.01em;
+    line-height: 1.08;
+  }
+  .subhead{
+    margin: 14px auto 0;
+    max-width: 520px;
+    color: var(--ink-soft);
+    font-size: 15.5px;
+    line-height: 1.55;
+  }
+
+  /* ---------- Viewer ---------- */
+  main{
+    max-width: 940px;
+    margin: 0 auto;
+    padding: 12px 20px 60px;
+  }
+
+  .viewer-top{
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding: 0 2px;
+  }
+  .room-label{
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 19px;
+    color: var(--navy);
+  }
+  .room-label .split{
+    color: var(--ink-soft);
+    font-weight: 400;
+    font-size: 15px;
+  }
+  .counter-label{
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--slate);
+    white-space: nowrap;
+  }
+
+  .compare{
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    background: var(--navy);
+    cursor: ew-resize;
+    touch-action: pan-y;
+    outline: none;
+  }
+  .compare:focus-visible{
+    box-shadow: var(--shadow), 0 0 0 3px var(--copper);
+  }
+  .compare-img{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+  .compare-before{
+    clip-path: inset(0 50% 0 0);
+  }
+  .compare.is-animating .compare-before{
+    transition: clip-path 0.5s cubic-bezier(.22,.61,.36,1);
+  }
+  .compare.is-animating .handle{
+    transition: left 0.5s cubic-bezier(.22,.61,.36,1);
+  }
+
+  .handle{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    pointer-events: none;
+  }
+  .handle::before{
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0; left: -1px;
+    width: 2px;
+    background: rgba(255,255,255,0.85);
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.15);
+  }
+  .handle-grip{
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.95);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.28);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--navy);
+    font-size: 16px;
+  }
+
+  .tag{
+    position: absolute;
+    top: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(22,40,61,0.55);
+    color: #fff;
+    backdrop-filter: blur(2px);
+    pointer-events: none;
+  }
+  .tag-before{ left: 14px; }
+  .tag-after{ right: 14px; background: rgba(178,98,60,0.82); }
+
+  /* ---------- Controls ---------- */
+  .viewer-controls{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .nav-btn{
+    flex: 0 0 auto;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--navy);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s, border-color 0.15s, transform 0.15s;
+  }
+  .nav-btn:hover{ background: var(--sand); border-color: var(--copper); }
+  .nav-btn:active{ transform: scale(0.94); }
+  .nav-btn:focus-visible{ outline: 2px solid var(--copper); outline-offset: 2px; }
+
+  .thumb-strip{
+    flex: 1;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 4px 2px;
+    scrollbar-width: thin;
+  }
+  .thumb-strip::-webkit-scrollbar{ height: 5px; }
+  .thumb-strip::-webkit-scrollbar-thumb{ background: var(--line); border-radius: 4px; }
+
+  .thumb{
+    flex: 0 0 auto;
+    width: 56px; height: 40px;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 2px solid transparent;
+    padding: 0;
+    cursor: pointer;
+    background: var(--sand);
+    opacity: 0.65;
+    transition: opacity 0.15s, border-color 0.15s, transform 0.15s;
+  }
+  .thumb img{ width: 100%; height: 100%; object-fit: cover; display: block; }
+  .thumb:hover{ opacity: 0.9; transform: translateY(-1px); }
+  .thumb.active{
+    opacity: 1;
+    border-color: var(--copper);
+  }
+  .thumb:focus-visible{ outline: 2px solid var(--copper); outline-offset: 2px; }
+
+  .hint{
+    text-align: center;
+    margin-top: 18px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+
+  footer{
+    text-align: center;
+    padding: 28px 20px 40px;
+    color: var(--slate);
+    font-size: 12.5px;
+    border-top: 1px solid var(--line);
+  }
+</style>
+</head>
+<body>
+
+  <header class="hero">
+    <p class="eyebrow">Renovation Journal</p>
+    <h1>12 Spouting Horn Road</h1>
+    <p class="subhead">Nahant, Massachusetts &mdash; eleven rooms, one shoreline view. Drag the slider to see the transformation.</p>
+  </header>
+
+  <main>
+    <div class="viewer-top">
+      <span class="room-label" id="roomLabel"></span>
+      <span class="counter-label" id="counterLabel"></span>
+    </div>
+
+    <div class="compare" id="compare" tabindex="0" role="slider" aria-label="Drag to compare before and after photos" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+      <img id="afterImg" class="compare-img" alt="After">
+      <img id="beforeImg" class="compare-img compare-before" alt="Before">
+      <span class="tag tag-before">Before</span>
+      <span class="tag tag-after">After</span>
+      <div class="handle" id="handle">
+        <div class="handle-grip">&#8596;</div>
+      </div>
+    </div>
+
+    <div class="viewer-controls">
+      <button class="nav-btn" id="prevBtn" aria-label="Previous pair">&#8592;</button>
+      <div class="thumb-strip" id="thumbStrip"></div>
+      <button class="nav-btn" id="nextBtn" aria-label="Next pair">&#8594;</button>
+    </div>
+
+    <p class="hint">Drag or tap the photo to compare &middot; use &larr; &rarr; to browse rooms</p>
+  </main>
+
+  <footer>12 Spouting Horn Road &middot; Nahant, MA 01908</footer>
+
+<script>
+  let galleryPairs = [
+    //{ image1: "before1.webp", caption1: "", image2: "after1.JPEG", caption2: ""  },
+    //{ image1: "before4.webp", caption1: "", image2: "after4.JPEG", caption2: ""  },
+    //{ image1: "before5.webp", caption1: "", image2: "after5.JPEG", caption2: ""  },
+    { image1: "before6.webp", caption1: "House from street side", image2: "after6.JPEG", caption2: "House from street side"  },
+    //{ image1: "before10.webp", caption1: "", image2: "after10.JPEG", caption2: ""  },
+    { image1: "before11.webp", caption1: "Dining room", image2: "after11.JPEG", caption2: "Dining room"  },
+    { image1: "before12.webp", caption1: "Master bedroom", image2: "after12.JPEG", caption2: "Living room"  },
+    { image1: "before13.webp", caption1: "Study", image2: "after13.JPEG", caption2: "Study"  },
+    { image1: "before14.webp", caption1: "Work room", image2: "after14.JPEG", caption2: "Master bedroom"  },
+    { image1: "before7.webp", caption1: "House from ocean side", image2: "after7.JPEG", caption2: "House from ocean side"  },
+    { image1: "before16.webp", caption1: "House from ocean side", image2: "after16.JPEG", caption2: "House from ocean side"  },
+    { image1: "before15.webp", caption1: "Backyard", image2: "after15.JPEG", caption2: "Backyard"  },
+    { image1: "before2.webp", caption1: "Deck", image2: "after2.JPEG", caption2: "Deck"  },
+    //{ image1: "before3.webp", caption1: "Deck", image2: "after3.JPEG", caption2: "Deck"  },
+    { image1: "before8.webp", caption1: "Deck", image2: "after8.JPEG", caption2: "View from deck"  },
+    { image1: "before9.webp", caption1: "Cove", image2: "after9.JPEG", caption2: "Cove"  },
+    //{ image1: "before17.webp", caption1: "", image2: "after17.JPEG", caption2: ""  },
+    //{ image1: "before18.webp", caption1: "", image2: "after18.JPEG", caption2: ""  },
+    //{ image1: "before19.webp", caption1: "", image2: "after19.JPEG", caption2: ""  },
+  ];
+
+  const compare = document.getElementById('compare');
+  const beforeImg = document.getElementById('beforeImg');
+  const afterImg = document.getElementById('afterImg');
+  const handle = document.getElementById('handle');
+  const roomLabel = document.getElementById('roomLabel');
+  const counterLabel = document.getElementById('counterLabel');
+  const thumbStrip = document.getElementById('thumbStrip');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  let currentPairIndex = 0;
+  let dragging = false;
+
+  function pad(n){ return String(n).padStart(2, '0'); }
+
+  function setReveal(percent, animated){
+    percent = Math.max(0, Math.min(100, percent));
+    compare.classList.toggle('is-animating', !!animated);
+    beforeImg.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
+    handle.style.left = percent + '%';
+    compare.setAttribute('aria-valuenow', Math.round(percent));
+  }
+
+  function renderThumbs(){
+    thumbStrip.innerHTML = '';
+    galleryPairs.forEach((pair, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'thumb';
+      btn.setAttribute('aria-label', pair.caption2 || pair.caption1 || ('Room ' + (i + 1)));
+      const img = document.createElement('img');
+      img.src = pair.image2;
+      img.alt = '';
+      btn.appendChild(img);
+      btn.addEventListener('click', () => goTo(i));
+      thumbStrip.appendChild(btn);
     });
-  });
-  document.getElementsByName('next-pair').forEach((btn, index) => {
-    btn.addEventListener('click', () => {
-	currentPairIndex = (currentPairIndex + 1) % galleryPairs.length;
-	showCurrentPair();
+  }
+
+  function updateThumbActive(){
+    thumbStrip.querySelectorAll('.thumb').forEach((el, i) => {
+      el.classList.toggle('active', i === currentPairIndex);
     });
+    const active = thumbStrip.children[currentPairIndex];
+    if (active) active.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  }
+
+  function showCurrentPair(){
+    const pair = galleryPairs[currentPairIndex];
+    beforeImg.src = pair.image1;
+    afterImg.src = pair.image2;
+    beforeImg.alt = 'Before — ' + (pair.caption1 || '');
+    afterImg.alt = 'After — ' + (pair.caption2 || '');
+
+    roomLabel.textContent = '';
+    if (pair.caption1 === pair.caption2) {
+      roomLabel.textContent = pair.caption1 || '';
+    } else {
+      roomLabel.innerHTML = (pair.caption1 || '') + ' <span class="split">&rarr;</span> ' + (pair.caption2 || '');
+    }
+
+    counterLabel.textContent = pad(currentPairIndex + 1) + ' / ' + pad(galleryPairs.length);
+    setReveal(50, true);
+    updateThumbActive();
+  }
+
+  function goTo(index){
+    currentPairIndex = (index + galleryPairs.length) % galleryPairs.length;
+    showCurrentPair();
+  }
+
+  prevBtn.addEventListener('click', () => goTo(currentPairIndex - 1));
+  nextBtn.addEventListener('click', () => goTo(currentPairIndex + 1));
+
+  // Drag-to-reveal
+  function percentFromEvent(e){
+    const rect = compare.getBoundingClientRect();
+    return ((e.clientX - rect.left) / rect.width) * 100;
+  }
+
+  compare.addEventListener('pointerdown', (e) => {
+    dragging = true;
+    compare.setPointerCapture(e.pointerId);
+    setReveal(percentFromEvent(e), false);
+  });
+  compare.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    setReveal(percentFromEvent(e), false);
+  });
+  compare.addEventListener('pointerup', () => { dragging = false; });
+  compare.addEventListener('pointercancel', () => { dragging = false; });
+  compare.addEventListener('dblclick', () => setReveal(50, true));
+
+  // Keyboard: slider adjusts when the compare view is focused, pair nav otherwise
+  compare.addEventListener('keydown', (e) => {
+    const current = parseFloat(handle.style.left) || 50;
+    if (e.key === 'ArrowLeft') { setReveal(current - 5, true); e.preventDefault(); e.stopPropagation(); }
+    if (e.key === 'ArrowRight') { setReveal(current + 5, true); e.preventDefault(); e.stopPropagation(); }
   });
 
-  showCurrentPair(); // Show the first pair on page load
+  document.addEventListener('keydown', (e) => {
+    if (document.activeElement === compare) return;
+    if (e.key === 'ArrowLeft') goTo(currentPairIndex - 1);
+    if (e.key === 'ArrowRight') goTo(currentPairIndex + 1);
+  });
 
-  </script>
-
+  renderThumbs();
+  showCurrentPair();
+</script>
 </body>
-
 </html>
